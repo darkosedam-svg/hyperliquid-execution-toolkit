@@ -1,5 +1,7 @@
 # hyperliquid-execution-toolkit
 
+[![CI](https://github.com/darkosedam-svg/hyperliquid-execution-toolkit/actions/workflows/ci.yml/badge.svg)](https://github.com/darkosedam-svg/hyperliquid-execution-toolkit/actions/workflows/ci.yml)
+
 Production-grade execution primitives for Hyperliquid perps. Order placement that respects tick/lot sizes, websocket reconnect logic that doesn't drop fills, and fee-aware sizing that won't blow your maker rebate assumptions.
 
 Built and battle-tested across multiple live trading systems. Released under MIT — use it, fork it, ship with it.
@@ -133,6 +135,12 @@ Built by Darko Kovačić. I build production algo-trading systems for Hyperliqui
 - 🌐 jessuskrist84@gmail.com
 - 🐦 [@GitBot]
 - ✉️ jessuskrist84@gmail.com
+
+## Hire me
+
+I build and harden trading infrastructure: execution engines, exchange connectors, backtesting pipelines, and the unglamorous reconciliation/reconnect logic that keeps live systems from silently losing money. Available for custom work and ongoing retainers around trading-infrastructure, execution, and backtesting engineering.
+
+Contact: darko.sedam@gmail.com
 
 ## License
 
