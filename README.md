@@ -33,10 +33,11 @@ It is **not**:
 
 ## Roadmap / not yet implemented
 
-Everything else on `ExecutionClient` is a stub that raises `NotImplementedError`:
+Everything else on `ExecutionClient` is a stub — most of it raises
+`NotImplementedError`, with one exception noted below:
 
 - `connect()` / `close()` — no REST metadata fetch or websocket wiring yet
-- `market_buy()` / `market_sell()` / `limit_buy()` / `limit_sell()` — no order submission
+- `market_buy()` / `market_sell()` / `limit_buy()` / `limit_sell()` — no order submission. `market_sell`, `limit_buy`, and `limit_sell` raise `NotImplementedError` immediately. `market_buy` is different: it first calls an internal helper that checks the connection state, so before `connect()` (i.e. always, today, since `connect()` itself isn't implemented) it raises `RuntimeError("Client not connected. Call await client.connect() first.")` instead — it would only reach its own `NotImplementedError` once connection state existed to check.
 - `cancel_all()`, `get_open_orders()`, `get_account_value()`
 - Signing and posting to `/exchange` (`_submit`)
 - Builder code support, vault deposit/withdraw helpers, spot trading endpoints (perps-only is the target), optional Prometheus metrics emitter
@@ -90,9 +91,12 @@ await ws.subscribe("userFills", {"user": "0x..."})
 ```
 
 The higher-level `ExecutionClient` example that used to be here (`market_buy`,
-`limit_buy`, etc.) does not work yet — those methods raise
-`NotImplementedError`. Use the modules above directly until the client is
-wired up.
+`limit_buy`, etc.) does not work yet. `limit_buy`, `limit_sell`, and
+`market_sell` raise `NotImplementedError`. `market_buy` raises `RuntimeError`
+("Client not connected...") instead, since it checks connection state before
+it would reach its own `NotImplementedError` — and there is no working
+`connect()` yet to satisfy that check. Use the modules above directly until
+the client is wired up.
 
 ## Usage notes (read these)
 

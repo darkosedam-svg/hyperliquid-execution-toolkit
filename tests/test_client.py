@@ -66,3 +66,37 @@ class TestGetPosition:
         result = await client.get_position("ETH")
 
         assert result is None
+
+
+class TestOrderPlacementStubs:
+    """Pins the exact exceptions the README documents for the unimplemented
+    order-placement methods (see "Roadmap / not yet implemented" and the
+    quick-start note about ExecutionClient in README.md).
+
+    market_buy is a special case: it calls the same connection-state check
+    that get_position uses (via `_get_spec`), so before `connect()` it
+    raises RuntimeError, not NotImplementedError — it would only reach its
+    own NotImplementedError once that check passed, which it can't yet
+    since connect() itself is unimplemented. The other three methods have
+    no such check and raise NotImplementedError immediately.
+    """
+
+    async def test_market_buy_raises_runtime_error_when_not_connected(self):
+        client = _make_client()
+        with pytest.raises(RuntimeError, match="not connected"):
+            await client.market_buy("ETH", Decimal("100"))
+
+    async def test_market_sell_raises_not_implemented_immediately(self):
+        client = _make_client()
+        with pytest.raises(NotImplementedError):
+            await client.market_sell("ETH", Decimal("100"))
+
+    async def test_limit_buy_raises_not_implemented_immediately(self):
+        client = _make_client()
+        with pytest.raises(NotImplementedError):
+            await client.limit_buy("ETH", Decimal("100"))
+
+    async def test_limit_sell_raises_not_implemented_immediately(self):
+        client = _make_client()
+        with pytest.raises(NotImplementedError):
+            await client.limit_sell("ETH", Decimal("100"))
