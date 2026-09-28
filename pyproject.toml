@@ -9,7 +9,7 @@ description = "Production-grade execution primitives for Hyperliquid perpetuals"
 readme = "README.md"
 license = {text = "MIT"}
 authors = [
-    {name = "Darko Kovačić"},
+    {name = "Darko Vlahovic"},
 ]
 keywords = ["hyperliquid", "trading", "perpetuals", "execution", "crypto"]
 classifiers = [
@@ -39,9 +39,9 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/GitBot/hyperliquid-execution-toolkit"
-Issues = "https://github.com/GitBot/hyperliquid-execution-toolkit/issues"
-Documentation = "https://github.com/GitBot/hyperliquid-execution-toolkit#readme"
+Homepage = "https://github.com/darkosedam-svg/hyperliquid-execution-toolkit"
+Issues = "https://github.com/darkosedam-svg/hyperliquid-execution-toolkit/issues"
+Documentation = "https://github.com/darkosedam-svg/hyperliquid-execution-toolkit#readme"
 
 [tool.hatch.build.targets.wheel]
 packages = ["hl_exec"]
