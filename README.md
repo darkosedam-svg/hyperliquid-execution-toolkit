@@ -3,19 +3,18 @@
 [![CI](https://github.com/darkosedam-svg/hyperliquid-execution-toolkit/actions/workflows/ci.yml/badge.svg)](https://github.com/darkosedam-svg/hyperliquid-execution-toolkit/actions/workflows/ci.yml)
 
 A work-in-progress execution layer for Hyperliquid perps: tick/lot-size-correct
-order math, a self-healing websocket that resubscribes and reconciles on
-reconnect, and fee-aware sizing helpers. The order-placement and account
-methods on `ExecutionClient` are still stubs — see "What works today" below
-before you build on this.
+order math, a self-healing websocket that resubscribes on reconnect and calls
+a caller-supplied hook so you can reconcile your own state, and a blended
+fee-rate helper. The order-placement and account methods on `ExecutionClient`
+are still stubs — see "What works today" below before you build on this.
 
 ## Why this exists
 
 Most "Hyperliquid Python" code on GitHub is a 30-line wrapper around the
-official SDK that breaks on the first reconnect, rejects orders due to tick
-rounding, or silently turns your maker limits into takers. This toolkit is
-being built to fix that boring stuff so you can focus on strategy — the
-precision and websocket layers are done; the order-submission layer is not
-yet.
+official SDK that breaks on the first reconnect or rejects orders due to tick
+rounding. This toolkit is being built to fix that boring stuff so you can
+focus on strategy — the precision and websocket layers are done; the
+order-submission layer (including post-only/maker handling) is not yet.
 
 It is **not**:
 - A trading bot
@@ -102,17 +101,17 @@ Once order submission lands, the toolkit will default to `testnet=True`.
 Today there's no live trading path at all, so this is forward-looking advice
 for when `connect()`/`_submit()` are implemented.
 
-### 3. Funding is hourly
+### 2. Funding is hourly
 The intent is for the position object to track funding accrual in real time
 once the websocket event handlers are wired into `_positions`. Not yet true.
 
-### 4. The websocket WILL disconnect
+### 3. The websocket WILL disconnect
 This part is real today: expect reconnects under normal operation. The
 `HyperliquidWebSocket` class handles them (heartbeat timeout detection,
 exponential backoff with jitter, subscription replay on reconnect) — see
 `hl_exec/websocket.py` and `tests/test_websocket.py`.
 
-### 5. Position size rounding is downward
+### 4. Position size rounding is downward
 Always, in `hl_exec.precision`. If you ask for 0.00187 BTC and
 `szDecimals=4`, `round_size` gives you 0.0018. This is intentional — it's the
 safe side. Your backtest should round the same way.
@@ -144,9 +143,8 @@ pytest tests/
 
 ## Who built this
 
-Built by Darko Vlahovic. I build algo-trading infrastructure for Hyperliquid,
-Solana, and CEX perps. Available for paid work — bug fixes, custom
-strategies, full systems.
+Built by Darko Vlahovic. I build algo-trading infrastructure for Hyperliquid
+perps. Available for paid work — bug fixes, custom strategies, full systems.
 
 - ✉️ jessuskrist84@gmail.com
 - 🌐 [github.com/darkosedam-svg](https://github.com/darkosedam-svg)

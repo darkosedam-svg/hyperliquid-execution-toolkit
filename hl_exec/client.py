@@ -3,10 +3,10 @@
 The client manages connection lifecycle, order placement with correct precision,
 websocket reconnection with replay, and position tracking with funding accrual.
 
-Most methods are stubbed pending full implementation — see ROADMAP.md for the
-implementation order. The precision-handling logic in `hl_exec.precision` is
-already production-ready and should be used directly even before the rest of
-the client is complete.
+Most methods are stubbed pending full implementation — see the "Roadmap / not
+yet implemented" section in README.md for what's left. The precision-handling
+logic in `hl_exec.precision` is tested and safe to use directly even before
+the rest of the client is complete.
 """
 
 from __future__ import annotations

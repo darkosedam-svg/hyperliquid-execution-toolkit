@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "hyperliquid-execution-toolkit"
 version = "0.1.0"
-description = "Production-grade execution primitives for Hyperliquid perpetuals"
+description = "Tick/lot-size rounding and a self-healing websocket for Hyperliquid perpetuals; order placement is not implemented yet"
 readme = "README.md"
 license = {text = "MIT"}
 authors = [

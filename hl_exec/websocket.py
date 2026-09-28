@@ -4,7 +4,9 @@ Design principles:
 
   * The exchange is allowed to disconnect us at any time.
   * We are never allowed to drop a fill.
-  * On reconnect, we refetch state from REST and reconcile.
+  * On reconnect, we call a caller-supplied hook so the caller can reconcile
+    its own state (e.g. refetch from REST); this module does not refetch or
+    reconcile anything itself.
   * Subscription state is preserved across reconnects.
   * Stale connections are detected via heartbeat timeout, not just socket
     close (sockets often appear "open" long after the peer is gone).
