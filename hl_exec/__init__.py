@@ -1,20 +1,20 @@
-"""hyperliquid-execution-toolkit: production execution primitives for HL perps.
+"""hyperliquid-execution-toolkit: execution-correctness primitives for HL perps.
 
-This package handles execution correctness — order placement that respects
-tick/lot precision, websocket reconnection logic, fee-aware sizing, and
-mark-price-correct risk checks. Strategy logic is left to the user.
+This package currently provides tick/lot-size-correct order math, a
+self-healing websocket with reconnect/backoff and subscription replay, and a
+blended fee-rate helper. Order placement and account-state tracking on
+`ExecutionClient` are still stubs — see the "Roadmap / not yet implemented"
+section of README.md. Strategy logic is left to the user.
 
-Typical usage:
+Typical usage (what actually runs today):
 
-    from hl_exec import ExecutionClient
-    
-    client = ExecutionClient(
-        wallet_address="0x...",
-        private_key="0x...",
-        testnet=True,
-    )
-    await client.connect()
-    fill = await client.market_buy("ETH", size_usd=Decimal("100"))
+    from decimal import Decimal
+    from hl_exec.precision import round_size, round_price, usd_to_size
+    from hl_exec.types import AssetSpec, Side
+
+    spec = AssetSpec("ETH", sz_decimals=4, px_decimals=2,
+                      min_size=Decimal("0.0001"), max_leverage=50)
+    size = usd_to_size(Decimal("100"), Decimal("3247.50"), spec)
 """
 
 from .client import ExecutionClient

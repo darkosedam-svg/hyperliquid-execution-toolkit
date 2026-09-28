@@ -3,10 +3,10 @@
 The client manages connection lifecycle, order placement with correct precision,
 websocket reconnection with replay, and position tracking with funding accrual.
 
-Most methods are stubbed pending full implementation — see ROADMAP.md for the
-implementation order. The precision-handling logic in `hl_exec.precision` is
-already production-ready and should be used directly even before the rest of
-the client is complete.
+Most methods are stubbed pending full implementation — see the "Roadmap / not
+yet implemented" section in README.md for what's left. The precision-handling
+logic in `hl_exec.precision` is tested and safe to use directly even before
+the rest of the client is complete.
 """
 
 from __future__ import annotations
@@ -174,10 +174,20 @@ class ExecutionClient:
     async def get_position(self, symbol: str) -> Optional[Position]:
         """Return current position with funding accrued through latest mark.
 
-        Returns None if no position is open in the symbol.
+        Positions are kept up to date by the websocket's `userEvents`
+        subscription (see `hl_exec.websocket`), which pushes fills, funding
+        payments and mark-price updates that mutate `self._positions` in
+        place. This method never hits the network itself — it just reads the
+        latest cached snapshot, which is why it's safe to call frequently
+        (e.g. every strategy tick) without worrying about rate limits.
+
+        Returns None if no position is open in the symbol (flat or never
+        traded). Raises if the client hasn't connected yet, since before
+        `connect()` there's no cache to read from.
         """
-        # TODO: implement using cached _positions, refreshed via WS userEvents
-        raise NotImplementedError
+        if not self._connected:
+            raise RuntimeError("Client not connected. Call await client.connect() first.")
+        return self._positions.get(symbol)
 
     async def get_open_orders(self, symbol: Optional[str] = None) -> list[OrderRequest]:
         """List currently-open orders, optionally filtered by symbol."""
